@@ -165,7 +165,7 @@ function OtpForm() {
           initial="hidden"
           animate="show"
           variants={fadeUp}
-          className="w-full max-w-md text-center mb-stack-gap-lg"
+          className="w-full max-w-sm text-center mb-stack-gap-lg"
         >
           <h2 className="text-2xl font-bold text-on-surface mb-3">
             Verify Your Number
@@ -181,7 +181,7 @@ function OtpForm() {
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="w-full max-w-md glass-card rounded-3xl p-element-padding flex flex-col gap-stack-gap-md"
+          className="w-full max-w-sm glass-card rounded-3xl p-element-padding flex flex-col gap-stack-gap-md"
         >
           {/* Dev helper */}
           {devOtp && (

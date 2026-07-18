@@ -53,14 +53,42 @@ export default function LoginPage() {
 
   return (
     <div className="text-on-background min-h-screen flex flex-col bg-[#0a0a0a]">
-      <main
-        style={{
-          backgroundImage: "linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.7)), url('/pngs/login-bg.jpg')",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-        className="flex-grow flex flex-col items-center justify-start pt-12 pb-24 px-container-margin relative overflow-hidden">
+      <main className="flex flex-col items-center justify-start pt-12 pb-24 px-container-margin relative overflow-hidden">
+
+        {/* Background Visuals */}
+        <div className="pointer-events-none fixed inset-0 overflow-hidden">
+          <motion.div
+            className="accent-glow top-10 -right-24"
+            animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.15, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="accent-glow bottom-10 -left-24"
+            animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.15, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+          <motion.span
+            className="floating-number absolute top-20 left-4 text-[160px] leading-none"
+            animate={{ y: [0, -18, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          >
+            1
+          </motion.span>
+          <motion.span
+            className="floating-number absolute bottom-40 right-4 text-[140px] leading-none"
+            animate={{ y: [0, 16, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            8
+          </motion.span>
+          <motion.span
+            className="floating-number absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[220px] leading-none"
+            animate={{ y: [0, -14, 0] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          >
+            9
+          </motion.span>
+        </div>
 
         {/* Branding */}
         <motion.header
@@ -91,7 +119,7 @@ export default function LoginPage() {
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="w-full max-w-md glass-card rounded-3xl p-element-padding flex flex-col gap-stack-gap-md z-20 relative"
+          className="w-full max-w-sm glass-card rounded-3xl p-element-padding flex flex-col gap-stack-gap-md z-20 relative"
         >
 
           <form onSubmit={handleContinue} className="flex flex-col gap-stack-gap-md">
@@ -176,7 +204,7 @@ export default function LoginPage() {
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="w-full max-w-md grid grid-cols-3 gap-stack-gap-sm mt-stack-gap-lg"
+          className="w-full max-w-sm grid grid-cols-3 gap-stack-gap-sm mt-stack-gap-lg"
         >
           <motion.div variants={fadeUp}>
             <TrustBadge icon="auto_awesome" label="INSTANT REPORT" />
