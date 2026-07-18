@@ -159,18 +159,15 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-white/10" />
           </motion.div>
 
-          <motion.button
+          <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={googleLoading}
-            variants={fadeUp}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
             className="w-full flex cursor-pointer items-center justify-center gap-3 bg-surface-container-lowest border border-white/10 rounded-xl py-3 font-semibold text-on-surface hover:border-white/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <GoogleIcon />
             {googleLoading ? "Redirecting..." : "Continue with Google"}
-          </motion.button>
+          </button>
 
         </motion.section>
 
