@@ -18,13 +18,9 @@ export async function POST(req: NextRequest) {
 
     const response: Record<string, unknown> = { success: true };
 
-    // Expose OTP in response for easy testing — local dev (`next dev`) and
-    // Vercel Preview deployments, but never Vercel Production. NODE_ENV alone
-    // can't distinguish these on Vercel: `next build`/`next start` always run
-    // with NODE_ENV=production, for Preview and Production alike. VERCEL_ENV
-    // is the signal Vercel actually sets per deployment type.
-    const isProdDeployment = process.env.VERCEL_ENV === "production";
-    if (process.env.NODE_ENV === "development" || (!!process.env.VERCEL_ENV && !isProdDeployment)) {
+    // No real SMS goes out on the mock provider, so surface the OTP in the
+    // response — otherwise there'd be no way to get it at all.
+    if (process.env.SMS_PROVIDER === "mock") {
       response.otp = otp;
     }
 
