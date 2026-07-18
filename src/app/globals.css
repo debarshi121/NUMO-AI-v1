@@ -40,10 +40,10 @@
   /* Font families */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-headline: "Montserrat", sans-serif;
-  --font-headline-alt: "Montserrat Alternates", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-numeral: "JetBrains Mono", monospace;
+  --font-headline: var(--font-montserrat), sans-serif;
+  --font-headline-alt: var(--font-montserrat-alternates), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-numeral: var(--font-jetbrains-mono), monospace;
 
   /* Spacing tokens */
   --spacing-container-margin: 20px;
@@ -56,7 +56,7 @@
 body {
   background-color: #0a0a0a;
   color: #e5e2e1;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 .material-symbols-outlined {
@@ -90,7 +90,7 @@ body {
 }
 
 .floating-number {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-jetbrains-mono), monospace;
   color: rgba(242, 202, 80, 0.05);
   position: absolute;
   user-select: none;
