@@ -9,6 +9,7 @@ import Show from "@/components/Show";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useDebounce } from "@/hooks/useDebounce";
+import DownloadReportPdfButton from "@/components/vehicleReport/DownloadReportPdfButton";
 
 type Report = {
   id: string;
@@ -173,12 +174,13 @@ export default function ReportsPage() {
                   >
                     VIEW REPORT
                   </button>
-                  <button className="border border-primary/40 text-primary text-[12px] font-bold tracking-[0.05em] py-3 rounded-lg flex items-center justify-center gap-2 active:bg-primary/10 transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[18px]">
-                      download
-                    </span>
-                    PDF
-                  </button>
+                  <DownloadReportPdfButton
+                    reportId={report.id}
+                    label="PDF"
+                    loadingLabel="PDF…"
+                    iconClassName="material-symbols-outlined text-[18px]"
+                    className="border border-primary/40 text-primary text-[12px] font-bold tracking-[0.05em] py-3 rounded-lg flex items-center justify-center gap-2 active:bg-primary/10 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  />
                 </div>
               </motion.div>
             ))}

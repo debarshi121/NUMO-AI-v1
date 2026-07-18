@@ -5,6 +5,7 @@ import MobileNav from "@/components/layout/MobileNav";
 import { getAllUniqueColors } from "@/lib/numerology/engine/color-engine";
 import AiOldVehicleAnalysis from "@/components/vehicleReport/AiOldVehicleAnalysis";
 import { TOldVehicleReportData } from "@/types/vehicleReport";
+import DownloadReportPdfButton from "@/components/vehicleReport/DownloadReportPdfButton";
 
 const stagger: Variants = {
   hidden: {},
@@ -518,13 +519,11 @@ export default function OldVehicleReport({
           variants={fadeUp}
           className="flex flex-col gap-stack-gap-md pb-12"
         >
-          <button
-            className="w-full cursor-pointer bg-primary text-on-primary py-4 rounded-xl font-headline text-headline-sm flex items-center justify-center gap-2 active:scale-95 transition-transform duration-200"
+          <DownloadReportPdfButton
+            reportId={reportData.reportId}
+            className="w-full cursor-pointer bg-primary text-on-primary py-4 rounded-xl font-headline text-headline-sm flex items-center justify-center gap-2 active:scale-95 transition-transform duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ boxShadow: "0 0 20px rgba(229,193,77,0.15)" }}
-          >
-            <span className="material-symbols-outlined">download</span>
-            Download PDF Report
-          </button>
+          />
           <button className="w-full cursor-pointer glass-card hover:bg-white/10 active:scale-95 transition-all text-on-surface py-4 rounded-xl font-headline text-headline-sm flex items-center justify-center gap-2">
             <span className="material-symbols-outlined">share</span>
             Share Analysis Report

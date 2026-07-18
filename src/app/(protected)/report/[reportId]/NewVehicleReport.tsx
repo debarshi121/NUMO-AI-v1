@@ -7,6 +7,7 @@ import { darkenHex } from "@/lib/utils";
 import AiDeepAnalysis from "@/components/vehicleReport/AiDeepAnalysis";
 import { TNewVehicleReportData } from "@/types/vehicleReport";
 import NumberChecker from "@/components/vehicleReport/NumberChecker";
+import DownloadReportPdfButton from "@/components/vehicleReport/DownloadReportPdfButton";
 
 const stagger: Variants = {
   hidden: {},
@@ -401,10 +402,10 @@ export default function NewVehicleReport({
           variants={fadeUp}
           className="flex flex-col gap-stack-gap-md pb-12"
         >
-          <button className="cursor-pointer bg-primary hover:opacity-90 active:scale-[0.98] transition-all text-on-primary text-headline-sm h-14 rounded-xl flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(242,202,80,0.3)]">
-            <span className="material-symbols-outlined">download</span>
-            Download PDF Report
-          </button>
+          <DownloadReportPdfButton
+            reportId={reportData.reportId}
+            className="cursor-pointer bg-primary hover:opacity-90 active:scale-[0.98] transition-all text-on-primary text-headline-sm h-14 rounded-xl flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(242,202,80,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+          />
           <button className="cursor-pointer glass-card hover:bg-white/10 active:scale-[0.98] transition-all text-on-surface text-headline-sm h-14 rounded-xl flex items-center justify-center gap-3">
             <span className="material-symbols-outlined">share</span>
             Share Guidance Report
