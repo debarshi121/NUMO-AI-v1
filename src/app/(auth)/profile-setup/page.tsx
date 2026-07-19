@@ -2,7 +2,7 @@
 
 import { StarsIcon } from "@/components/Icons";
 import Footer from "@/components/layout/Footer";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";

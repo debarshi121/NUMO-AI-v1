@@ -12,6 +12,7 @@ import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -111,6 +112,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <NextTopLoader color="#f2ca50" showSpinner={false} height={3} />
         <Providers>{children}</Providers>
         <Toaster position="top-center" />
         <Analytics />

@@ -5,7 +5,7 @@ import NewVehicleInsightsForm from '@/components/NewVehicleInsightsForm';
 import Show from '@/components/Show';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useCallback, useRef, useState } from 'react';
 
 export default function NewVehicleAnalysisPage() {

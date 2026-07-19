@@ -2,7 +2,8 @@
 
 import { Suspense, useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { motion, type Variants } from "framer-motion";
 import { StarsIcon } from "@/components/Icons";
 import Footer from "@/components/layout/Footer";

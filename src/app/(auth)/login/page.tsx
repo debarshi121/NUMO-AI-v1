@@ -5,7 +5,7 @@ import { motion, type Variants } from "framer-motion";
 import TrustBadge from "./TrustBadge";
 import Footer from "@/components/layout/Footer";
 import { GoogleIcon } from "@/components/Icons";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { signIn } from "next-auth/react";
 
 const stagger: Variants = {
