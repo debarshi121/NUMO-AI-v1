@@ -71,10 +71,12 @@ export default function RootLayout({
           crossOrigin=""
         />
         {/* Material Symbols isn't offered by next/font/google, so it stays
-            on a manual stylesheet link; the rest of the fonts are self-hosted above. */}
+            on a manual stylesheet link; the rest of the fonts are self-hosted above.
+            display=block avoids a flash of the raw ligature text (e.g. "calendar_month")
+            before the icon font finishes loading on a first, uncached visit. */}
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=optional"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
           rel="stylesheet"
         />
       </head>
