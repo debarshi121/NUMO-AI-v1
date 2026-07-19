@@ -47,10 +47,40 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["500"],
 });
 
+const SITE_DESCRIPTION =
+  "Your divine numerology Insights for perfect vehicle matches. Unleash cosmic wisdom on wheels with Numo AI.";
+
 export const metadata: Metadata = {
-  title: "Numo AI",
-  description:
-    "Your divine numerology Insights for perfect vehicle matches. Unleash cosmic wisdom on wheels with Numo AI.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  ),
+  title: {
+    default: "Numo AI",
+    template: "%s | Numo AI",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "Numo AI",
+    "vehicle numerology",
+    "number plate numerology",
+    "car number compatibility",
+    "numerology insights",
+  ],
+  openGraph: {
+    title: "Numo AI",
+    description: SITE_DESCRIPTION,
+    siteName: "Numo AI",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Numo AI",
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
