@@ -70,10 +70,15 @@ export type CompatibilityResult = {
  * Reduces the plate's last four digits to a single vibration digit, then
  * classifies it as a STRONG match (equals the Birth Number), GOOD (friendly
  * to the Birth Number), NEUTRAL (neither friendly nor an enemy), or WEAK
- * (an enemy of the Birth Number) — before applying a "Destiny veto" that
- * downgrades an otherwise-good result to WEAK if the vibration conflicts
- * with the Destiny Number, since the life path takes precedence over
- * surface-level personality friendliness.
+ * (an enemy of the Birth Number) — before applying two downgrades, in order:
+ * a "Vehicle Taboo veto" that forces WEAK if the vibration is 4 or 8 (the
+ * Rahu/Saturn accident-risk taboos) unless that taboo number is the owner's
+ * own Birth or Destiny number, mirroring the same exemption used by
+ * {@link getRecommendedTotals} and {@link getAvoidPatterns} so this checker
+ * never calls a number GOOD that the Avoid Patterns list warns against; and
+ * a "Destiny veto" that downgrades an otherwise-good result to WEAK if the
+ * vibration conflicts with the Destiny Number, since the life path takes
+ * precedence over surface-level personality friendliness.
  */
 export function calculateVehicleCompatibility(
     plate: string,
@@ -129,7 +134,27 @@ export function calculateVehicleCompatibility(
         result = responseMap.WEAK;
     }
 
-    // 4. Destiny Veto Logic (Downgrades if it conflicts with the life path)
+    // 4. Vehicle Taboo Veto (4: Rahu, 8: Saturn — accident/delay risk)
+    // Same exemption rule as getRecommendedTotals/getAvoidPatterns: only the
+    // taboo number that matches the owner's own Birth or Destiny number is
+    // safe. Otherwise this overrides even a friendly/STRONG-adjacent result,
+    // so the checker can never call a number GOOD while Avoid Patterns lists
+    // it as something to avoid.
+    const vehicleTaboos = [4, 8];
+    if (
+        vehicleTaboos.includes(vibration) &&
+        birthNumber !== vibration &&
+        destinyNumber !== vibration
+    ) {
+        result = {
+            ...responseMap.WEAK,
+            title: "Vehicle Taboo Number",
+            desc: `The number ${vibration} is a classic Rahu/Saturn vehicle taboo linked to accident or delay risk. It isn't your own Birth or Destiny number, so it can't offset that risk.`,
+            suggestion: "Consider choosing a plate that avoids 4 and 8, unless that number is your own Birth or Destiny number."
+        };
+    }
+
+    // 5. Destiny Veto Logic (Downgrades if it conflicts with the life path)
     if (result.status !== "WEAK MATCH" && destinyRels.enemy.includes(vibration)) {
         result = {
             ...responseMap.WEAK,

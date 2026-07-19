@@ -376,8 +376,16 @@ export function getPurchaseDateAnalysis(
         Math.min(100, Math.round(50 + score * 10 + weekdayScore * 5)),
     );
 
+    // An enemy alignment on EITHER number is a strict veto to CONFLICT, mirroring
+    // scoreDate's "RULE 1" veto above and describePurchaseDateEnergy's own enemy-first
+    // priority below — otherwise a birth-friendly/destiny-enemy day could net to a
+    // "BALANCED" score while its own description text still reads as a direct clash.
     const status: PurchaseDateAnalysisStatus =
-        score <= -2 ? "CONFLICT" : score >= 2 ? "HARMONY" : "BALANCED";
+        birthAlign === "enemy" || destinyAlign === "enemy"
+            ? "CONFLICT"
+            : score >= 2
+                ? "HARMONY"
+                : "BALANCED";
 
     const title =
         status === "CONFLICT"

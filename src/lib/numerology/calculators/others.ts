@@ -100,6 +100,14 @@ const COLOR_ALIGNMENT_SCORE: Record<VehicleColorMatchStatus, number> = {
 const CONFLICT_PENALTY_PER_ITEM = 2;
 const MAX_CONFLICT_PENALTY = 6;
 
+const VEHICLE_TABOO_ALIGNMENT_PENALTY = 2;
+// Same principle as VEHICLE_TABOO_SCORE_CEILING above: capped low enough that even a perfect
+// color match (COLOR_ALIGNMENT_SCORE's max, +1) can't pull the overall verdict past "mixed".
+// An unowned Rahu/Saturn vehicle number should never read as "strong" or "perfect" here while
+// calculateVehicleCompatibility's plate picker calls that same number a WEAK match — cosmetic
+// factors like color temper the presentation, but shouldn't be able to erase this caution.
+const VEHICLE_TABOO_ALIGNMENT_CEILING = -3;
+
 /**
  * Builds the top-of-report verdict for a customer who already owns their
  * vehicle ("old vehicle" flow), weighing the plate's vehicle number against
@@ -107,8 +115,9 @@ const MAX_CONFLICT_PENALTY = 6;
  * cross-factor conflicts found elsewhere in the report.
  *
  * Scoring: start from the vehicle number's planetary friendliness to both
- * Birth and Destiny (via {@link RELATION_SCORE}), subtract a penalty when the
- * number is a Rahu/Saturn "vehicle taboo" the owner doesn't personally own,
+ * Birth and Destiny (via {@link RELATION_SCORE}). When the number is a
+ * Rahu/Saturn "vehicle taboo" the owner doesn't personally own, subtract a
+ * penalty *and* cap the result so it can never out-vote the taboo caution —
  * then layer in the color-match score and a capped penalty for hidden
  * conflicts. The combined score is bucketed into one of five alignment tiers
  * (perfect/strong/balanced/mixed/conflict) that select the headline copy.
@@ -146,10 +155,10 @@ export function getOldVehicleAlignment(
     destinyNumber,
   );
 
-  const vehicleNumberScore =
-    RELATION_SCORE[birthAlign] +
-    RELATION_SCORE[destinyAlign] -
-    (isTabooNumber ? 2 : 0);
+  const baseVehicleNumberScore = RELATION_SCORE[birthAlign] + RELATION_SCORE[destinyAlign];
+  const vehicleNumberScore = isTabooNumber
+    ? Math.min(baseVehicleNumberScore - VEHICLE_TABOO_ALIGNMENT_PENALTY, VEHICLE_TABOO_ALIGNMENT_CEILING)
+    : baseVehicleNumberScore;
 
   // The vehicle number is only one factor. A number that resonates perfectly with the
   // owner shouldn't be reported as flawless when the current color or hidden
@@ -243,6 +252,14 @@ const VEHICLE_NUMBER_ALIGN_SCORE: Record<RelationAlign, number> = {
 
 const VEHICLE_TABOO_PENALTY = 15;
 
+// An unowned Rahu/Saturn taboo caps the score below the "BALANCED" cutoff (45), rather than
+// merely subtracting points — the same "unowned taboo overrides friendliness, it doesn't just
+// dent it" rule calculateVehicleCompatibility already enforces via its plate-picker veto (see
+// number-engine.ts). Without this ceiling, a strongly birth/destiny-friendly taboo number could
+// still land at BALANCED or better here while the plate picker calls that exact number a WEAK
+// match — the same contradiction this constant exists to rule out everywhere in the report.
+const VEHICLE_TABOO_SCORE_CEILING = 40;
+
 const RELATION_VERB_PHRASE: Record<RelationAlign, string> = {
   friendly: "resonates strongly with",
   neutral: "holds a steady, balanced connection with",
@@ -275,9 +292,11 @@ function describeVehicleNumberAlignment(
  * friendliness at full weight plus the Birth number's at 60% weight (the
  * same destiny-weighted-higher convention used across every score in this
  * app), adds a flat bonus when the vehicle number equals the owner's own
- * Birth or Destiny number (a classic auspicious omen), and subtracts a flat
- * penalty when the number is an unowned Rahu/Saturn "vehicle taboo". The
- * clamped 0-100 result is bucketed into a PERFECT/GOOD/BALANCED/POOR verdict.
+ * Birth or Destiny number (a classic auspicious omen), and — when the number
+ * is an unowned Rahu/Saturn "vehicle taboo" — subtracts a flat penalty *and*
+ * caps the result below the BALANCED cutoff, so no amount of friendliness
+ * can talk the verdict up past POOR. The clamped 0-100 result is bucketed
+ * into a PERFECT/GOOD/BALANCED/POOR verdict.
  */
 export function getVehicleNumberAnalysis(
   vehicleNumerologyNumber: number,
@@ -321,7 +340,7 @@ export function getVehicleNumberAnalysis(
     destinyNumber,
   );
   if (isTabooNumber) {
-    score -= VEHICLE_TABOO_PENALTY;
+    score = Math.min(score - VEHICLE_TABOO_PENALTY, VEHICLE_TABOO_SCORE_CEILING);
   }
 
   const compatibilityScore = Math.max(0, Math.min(100, score));

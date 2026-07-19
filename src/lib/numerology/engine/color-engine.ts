@@ -24,6 +24,14 @@ export type LuckyColorsResult = {
 
 /**
  * Returns recommended and avoided vehicle colors based on numerology birth and destiny numbers.
+ *
+ * "Recommended" is deliberately generous — any color either number's own guidance calls a
+ * primary/secondary pick, scored destiny-first (60% birth weight), so a color special to just
+ * one of the two numbers still surfaces. "Avoid" is deliberately stricter: a color only earns
+ * that label if {@link getVehicleColorAnalysis}'s destiny-weighted formula — the same one used
+ * to judge an already-owned color elsewhere in the report — actually calls it UNLUCKY for this
+ * pair, so a color one number personally dislikes but the other (full-weight) number loves
+ * isn't flagged here while the Color Match analysis calls that very color "BALANCED".
  * @param birthNumber - The user's birth number (1-9)
  * @param destinyNumber - The user's destiny number (1-9)
  * @returns LuckyColorsResult with recommendations and explanations
@@ -51,11 +59,28 @@ export function getLuckyVehicleColors(
     };
   }
 
-  // Build a set of colors to avoid (from both destiny and birth avoid lists)
-  const avoidSet = new Set([
-    ...birth.avoid.map((item) => item.color.toLowerCase()),
-    ...destiny.avoid.map((item) => item.color.toLowerCase()),
-  ]);
+  // A color only earns a spot on "avoid" if the SAME destiny-weighted formula
+  // getVehicleColorAnalysis uses for an already-owned color (below) actually calls it
+  // UNLUCKY — not merely because one number's own list personally dislikes it while the
+  // OTHER, more heavily weighted number actually favors it as a primary/secondary pick.
+  // A raw union of both numbers' avoid lists used to flag colors this list should
+  // recommend, while the Color Match analysis called the very same color "BALANCED"
+  // for the very same Birth/Destiny pair.
+  const avoidCandidates = new Map<
+    string,
+    { color: string; hex: string; reason: string }
+  >();
+  [...birth.avoid, ...destiny.avoid].forEach((item) => {
+    const key = item.color.toLowerCase();
+    if (!avoidCandidates.has(key)) avoidCandidates.set(key, item);
+  });
+
+  const avoid = Array.from(avoidCandidates.values()).filter(
+    (item) =>
+      getVehicleColorAnalysis(birthNumber, destinyNumber, item.color).status ===
+      "UNLUCKY",
+  );
+  const avoidSet = new Set(avoid.map((item) => item.color.toLowerCase()));
 
   // Collect every color EITHER number calls out as primary/secondary (and neither avoids).
   // The birth-only version of this used to silently drop colors that only appeared on the
@@ -135,20 +160,9 @@ export function getLuckyVehicleColors(
   // Sort recommendations by score (highest first)
   recommendations.sort((a, b) => b.score - a.score);
 
-  // Return recommendations, avoided colors, and ideology explanation
-  // Merge avoid arrays and remove duplicates by color (case-insensitive)
-  const mergedAvoid = [...birth.avoid, ...destiny.avoid];
-  const uniqueAvoidMap = new Map();
-  mergedAvoid.forEach((item) => {
-    const colorKey = item.color.toLowerCase();
-    if (!uniqueAvoidMap.has(colorKey)) {
-      uniqueAvoidMap.set(colorKey, item);
-    }
-  });
-
   return {
     recommended: recommendations,
-    avoid: Array.from(uniqueAvoidMap.values()),
+    avoid,
   };
 }
 

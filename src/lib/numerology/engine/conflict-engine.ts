@@ -83,10 +83,12 @@ export function getHiddenConflicts(
         );
     }
 
-    // Tuesday (Mars-ruled) purchases add a restless edge unless the owner's own numbers are Mars-friendly.
-    if (purchaseDate && purchaseDate.getDay() === 2 && birthNumber !== 9) {
+    // Tuesday (Mars-ruled) purchases add a restless edge unless the owner's own Birth OR
+    // Destiny number IS Mars(9) — matching the same "own number tempers this energy"
+    // exemption used for the vehicle taboo and weekday-match bonus elsewhere in this app.
+    if (purchaseDate && purchaseDate.getDay() === 2 && birthNumber !== 9 && destinyNumber !== 9) {
         conflicts.push(
-            "Purchase falls on a Mars-ruled Tuesday, adding a restless, accident-prone edge that your Birth Number doesn't temper.",
+            "Purchase falls on a Mars-ruled Tuesday, adding a restless, accident-prone edge that neither your Birth nor Destiny Number tempers.",
         );
     }
 

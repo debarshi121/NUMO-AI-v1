@@ -21,7 +21,9 @@ export default function CompatibilityButton({ plateData, onResult }: Compatibili
     const isStrongMatch = lastStatus === "STRONG MATCH";
 
     function handleClick() {
-        if (!plateData.vehicleNumber) return;
+        // A plate with no digits at all reduces to a vibration of 0, which isn't a real
+        // numerology digit (1-9) — bail out instead of showing a misleadingly plausible verdict.
+        if (!plateData.vehicleNumber || !/\d/.test(plateData.vehicleNumber)) return;
 
         const compatibilityResult = calculateVehicleCompatibility(
             plateData.vehicleNumber,
