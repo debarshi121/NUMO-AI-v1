@@ -80,7 +80,7 @@ const ProfileSetup = () => {
                     initial="hidden"
                     animate="show"
                     variants={fadeUp}
-                    className="w-full max-w-md mx-auto mb-stack-gap-lg text-center"
+                    className="w-full max-w-sm mx-auto mb-stack-gap-lg text-center"
                 >
                     <h2 className="text-2xl font-bold text-on-surface mb-4 mx-auto">
                         Personalize Your <br /> Numerology Profile
@@ -95,7 +95,7 @@ const ProfileSetup = () => {
                     initial="hidden"
                     animate="show"
                     variants={stagger}
-                    className="w-full max-w-md mx-auto glass-card rounded-xl p-element-padding flex flex-col gap-stack-gap-md mb-24"
+                    className="w-full max-w-sm mx-auto glass-card rounded-xl p-element-padding flex flex-col gap-stack-gap-md mb-24"
                 >
                     <form onSubmit={handleSubmit} className="flex flex-col gap-stack-gap-md">
                         {/* Name Input */}

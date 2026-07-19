@@ -185,7 +185,7 @@ function OtpForm() {
         >
           {/* Dev helper */}
           {devOtp && (
-            <motion.div variants={fadeUp} className="bg-surface-container-low border border-primary/20 rounded-xl px-4 py-2 text-center">
+            <motion.div variants={fadeUp} className="px-4 py-2 text-center">
               <span className="text-xs text-on-surface-variant">Dev OTP: </span>
               <span className="text-primary font-bold font-mono tracking-widest">
                 {devOtp}
