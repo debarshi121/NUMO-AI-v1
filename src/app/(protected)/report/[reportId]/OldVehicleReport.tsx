@@ -47,7 +47,7 @@ export default function OldVehicleReport({
   });
 
   return (
-    <div className="min-h-screen bg-background text-on-surface font-body pb-32 selection:bg-primary/30">
+    <div className="min-h-screen bg-[#0A0A0A] text-on-surface font-body pb-32 selection:bg-primary/30">
       <Header />
 
       <main className="mt-8 px-container-margin space-y-stack-gap-lg max-w-md mx-auto">
@@ -343,7 +343,7 @@ export default function OldVehicleReport({
             variants={fadeUp}
             className="font-headline text-headline-sm font-semibold mb-6"
           >
-            Hidden Conflict Detection
+            Hidden Conflicts
           </motion.h3>
           {reportData.conflicts.length > 0 ? (
             <ul className="space-y-4">

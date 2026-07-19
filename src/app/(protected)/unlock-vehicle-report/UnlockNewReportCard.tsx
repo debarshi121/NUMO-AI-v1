@@ -54,31 +54,31 @@ export default function UnlockNewReportCard({
             className="flex flex-col gap-4"
         >
             {/* Vehicle Buying Profile Card */}
-            <motion.div variants={fadeUp} className="relative rounded-2xl border border-outline-variant bg-[#161510]/40 p-5">
+            <motion.div variants={fadeUp} className="relative rounded-2xl border border-outline-variant glass-card p-5">
                 <p className="text-[13px] font-semibold tracking-widest text-primary uppercase mb-4">
                     Vehicle Buying Profile
                 </p>
 
                 {/* Stats row */}
                 <motion.div variants={stagger} className="flex gap-3 mb-4">
-                    <motion.div variants={fadeUp} className="flex-1 rounded-xl border border-outline-variant bg-[#161510]/40 p-3">
+                    <motion.div variants={fadeUp} className="flex-1 rounded-xl border border-outline-variant glass-card p-3">
                         <p className="text-[10px] text-center tracking-widest text-outline uppercase mb-2">Birth #</p>
                         <p className="font-mono text-center text-data-numeral font-medium text-primary leading-none">{birthNumber}</p>
                     </motion.div>
-                    <motion.div variants={fadeUp} className="flex-1 rounded-xl border border-outline-variant bg-[#161510]/40 p-3">
+                    <motion.div variants={fadeUp} className="flex-1 rounded-xl border border-outline-variant glass-card p-3">
                         <p className="text-[10px] text-center tracking-widest text-outline uppercase mb-2">Destiny #</p>
                         <p className="font-mono text-center text-data-numeral font-medium text-primary leading-none">{destinyNumber}</p>
                     </motion.div>
                 </motion.div>
 
                 {/* Buying preference */}
-                <motion.div variants={fadeUp} className="flex items-center justify-between rounded-xl border border-outline-variant bg-[#161510]/40 px-3 py-3 mb-4">
+                <motion.div variants={fadeUp} className="flex items-center justify-between rounded-xl border border-outline-variant glass-card px-3 py-3 mb-4">
                     <p className="text-[10px] text-center tracking-widest text-outline uppercase">Buying Preference</p>
                     <p className="text-[13px] font-medium text-center tracking-widest text-primary uppercase">{buyingMonthLabel}</p>
                 </motion.div>
 
                 {/* Alignment banner */}
-                <motion.div variants={fadeUp} className="rounded-xl border border-primary/30 bg-[#161510]/40 px-4 py-3">
+                <motion.div variants={fadeUp} className="rounded-xl border border-primary/30 glass-card px-4 py-3">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="material-symbols-outlined text-body-lg text-primary">trending_up</span>
                         <p className="text-[10px] font-bold tracking-widest text-primary uppercase">
@@ -110,7 +110,7 @@ export default function UnlockNewReportCard({
             </motion.div>
 
             {/* Analysis Progress Card */}
-            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant bg-[#161510]/40 px-5 py-4">
+            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant glass-card px-5 py-4">
                 <p className="text-[10px] tracking-widest text-outline uppercase mb-3">Preliminary Analysis</p>
                 <div className="h-2 w-full rounded-full bg-surface-container-high overflow-hidden mb-2">
                     <div className="h-full w-full rounded-full bg-gradient-to-r from-primary-container to-primary" />
@@ -137,7 +137,7 @@ export default function UnlockNewReportCard({
             </motion.div>
 
             {/* What You'll Unlock Card */}
-            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant bg-[#161510]/40 p-5">
+            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant glass-card p-5">
                 <div className="flex items-center gap-2 mb-4">
                     <h3 className="text-body-lg font-medium text-on-surface">What You&apos;ll Unlock</h3>
                 </div>
@@ -152,7 +152,7 @@ export default function UnlockNewReportCard({
             </motion.div>
 
             {/* CTA / Paywall Card */}
-            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant bg-[#161510]/40 p-6 text-center relative mt-8">
+            <motion.div variants={fadeUp} className="rounded-2xl border border-outline-variant glass-card p-6 text-center relative mt-8">
                 {/* Lock icon */}
                 <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-[#161510] border border-primary">
                     <span className="material-symbols-outlined text-[28px] text-primary [font-variation-settings:'FILL'_1]">

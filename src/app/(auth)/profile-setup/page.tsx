@@ -58,7 +58,7 @@ const ProfileSetup = () => {
     };
 
     return (
-        <div className="bg-background text-on-background min-h-screen flex flex-col relative" style={{
+        <div className="bg-[#0A0A0A] text-on-background min-h-screen flex flex-col relative" style={{
             backgroundImage:
                 "radial-gradient(circle at 50% 40%, rgba(242, 202, 80, 0.1) 0%, rgba(10, 10, 10, 1) 60%)",
         }}>

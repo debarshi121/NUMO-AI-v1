@@ -17,10 +17,13 @@ import {
 
 export default async function ReportPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ reportId?: string }>;
+  searchParams: Promise<{ scrollTo?: string }>;
 }) {
   const { reportId } = await params;
+  const { scrollTo } = await searchParams;
 
   if (!reportId) redirect("/vehicle-numerology");
 
@@ -117,7 +120,7 @@ export default async function ReportPage({
     } else {
       reportData = cachedNewReportData;
     }
-    return <NewVehicleReport reportData={reportData} />;
+    return <NewVehicleReport reportData={reportData} scrollToSection={scrollTo} />;
   } else {
     let reportData: TOldVehicleReportData;
     const cachedReportData = report.reportData as unknown as

@@ -10,7 +10,7 @@ import OldVehicleReportDocument from "@/lib/pdf/OldVehicleReportDocument";
 
 // GET /api/vehicle-report/[reportId]/pdf - Stream the report as a downloadable PDF
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ reportId: string }> },
 ) {
   const { reportId } = await params;
@@ -54,9 +54,11 @@ export async function GET(
 
   try {
     const isNewVehicle = report.productType === ProductType.NEW_VEHICLE_REPORT;
+    const reportUrl = `${req.nextUrl.origin}/report/${reportId}?scrollTo=number-plate-strategy`;
     const document = isNewVehicle
       ? createElement(NewVehicleReportDocument, {
           reportData: report.reportData as unknown as TNewVehicleReportData,
+          reportUrl,
         })
       : createElement(OldVehicleReportDocument, {
           reportData: report.reportData as unknown as TOldVehicleReportData,

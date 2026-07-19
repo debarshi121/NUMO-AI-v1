@@ -133,7 +133,7 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-on-surface antialiased pb-24">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#0A0A0A] text-on-surface antialiased pb-24">
       {/* Background Ambient Glow */}
       <div className="fixed top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="fixed bottom-20 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />

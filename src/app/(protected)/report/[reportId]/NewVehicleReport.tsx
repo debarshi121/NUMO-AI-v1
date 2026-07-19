@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import Header from "@/components/layout/Header";
 import MobileNav from "@/components/layout/MobileNav";
@@ -36,9 +37,28 @@ const MONTH_NAMES = [
 
 export default function NewVehicleReport({
   reportData,
+  scrollToSection,
 }: {
   reportData: TNewVehicleReportData;
+  scrollToSection?: string;
 }) {
+  const [justArrived, setJustArrived] = useState(false);
+
+  useEffect(() => {
+    if (!scrollToSection) return;
+    const scrollTimer = setTimeout(() => {
+      document
+        .getElementById(scrollToSection)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setJustArrived(true);
+    }, 400);
+    const highlightTimer = setTimeout(() => setJustArrived(false), 2600);
+    return () => {
+      clearTimeout(scrollTimer);
+      clearTimeout(highlightTimer);
+    };
+  }, [scrollToSection]);
+
   const createdAtDate = new Date(reportData.createdAt);
   const createdAtStr = createdAtDate.toLocaleString("en-US", {
     month: "long",
@@ -54,7 +74,7 @@ export default function NewVehicleReport({
   const buyingMonthName = MONTH_NAMES[parseInt(preferredMonth, 10) - 1] || "-";
 
   return (
-    <div className="min-h-screen bg-background text-on-surface font-body pb-32 selection:bg-primary/30">
+    <div className="min-h-screen bg-[#0A0A0A] text-on-surface font-body pb-32 selection:bg-primary/30">
       {/* Header */}
       <Header />
 
@@ -329,11 +349,12 @@ export default function NewVehicleReport({
 
         {/* Number Plate Strategy */}
         <motion.section
+          id="number-plate-strategy"
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
           variants={fadeUp}
-          className="space-y-stack-gap-md"
+          className="space-y-stack-gap-md scroll-mt-6"
         >
           <h3 className="font-headline text-headline-sm font-semibold flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">pin</span>
@@ -347,7 +368,11 @@ export default function NewVehicleReport({
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
           variants={fadeUp}
-          className="glass-card rounded-xl p-5 border-outline-variant"
+          className={`glass-card rounded-xl p-5 border-outline-variant transition-shadow duration-700 ${
+            justArrived
+              ? "ring-2 ring-primary shadow-[0_0_30px_rgba(242,202,80,0.45)]"
+              : ""
+          }`}
         >
           <NumberChecker reportData={reportData} />
         </motion.section>

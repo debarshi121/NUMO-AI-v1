@@ -22,7 +22,7 @@ export default function LogoutConfirmationModal({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-container-margin">
       <div
-        className="absolute inset-0 bg-background/80 backdrop-blur-md"
+        className="absolute inset-0 bg-[#0A0A0A]/80 backdrop-blur-md"
         onClick={() => !isLoggingOut && onClose()}
       />
       <div className="glass-card relative z-10 w-full max-w-sm rounded-2xl border border-primary/20 p-8">

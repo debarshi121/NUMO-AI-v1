@@ -1,4 +1,4 @@
-import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, View, Text, Link, Svg, Path, StyleSheet } from "@react-pdf/renderer";
 import type { TNewVehicleReportData } from "@/types/vehicleReport";
 import { pdfColors } from "./theme";
 
@@ -158,6 +158,64 @@ const styles = StyleSheet.create({
     color: pdfColors.danger,
     lineHeight: 1.4,
   },
+  ctaBox: {
+    borderWidth: 1,
+    borderColor: pdfColors.primary,
+    borderRadius: 8,
+    padding: 14,
+    backgroundColor: pdfColors.surface,
+  },
+  ctaHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 8,
+  },
+  ctaIconBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: pdfColors.primaryContainer,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ctaTitle: {
+    fontSize: 12,
+    fontFamily: "Helvetica-Bold",
+    color: pdfColors.ink,
+    flex: 1,
+  },
+  ctaBody: {
+    fontSize: 9.5,
+    color: pdfColors.inkMuted,
+    lineHeight: 1.5,
+    marginBottom: 10,
+  },
+  ctaFeatureRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 6,
+  },
+  ctaFeatureText: {
+    fontSize: 9,
+    color: pdfColors.ink,
+  },
+  ctaButton: {
+    marginTop: 8,
+    backgroundColor: pdfColors.primary,
+    borderRadius: 6,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ctaButtonText: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    color: pdfColors.onPrimary,
+    textAlign: "center",
+  },
   footer: {
     position: "absolute",
     bottom: 24,
@@ -172,10 +230,38 @@ const styles = StyleSheet.create({
   },
 });
 
+function PinIcon() {
+  return (
+    <Svg width={14} height={14} viewBox="0 0 24 24">
+      <Path
+        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+        fill={pdfColors.onPrimary}
+      />
+    </Svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <Svg width={11} height={11} viewBox="0 0 24 24">
+      <Path
+        d="M20 6 9 17l-5-5"
+        fill="none"
+        stroke={pdfColors.primary}
+        strokeWidth={3}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
 export default function NewVehicleReportDocument({
   reportData,
+  reportUrl,
 }: {
   reportData: TNewVehicleReportData;
+  reportUrl: string;
 }) {
   const createdAtStr = new Date(reportData.createdAt).toLocaleString("en-US", {
     month: "long",
@@ -278,6 +364,40 @@ export default function NewVehicleReportDocument({
                 <Text style={styles.dateYear}>{d.year}</Text>
               </View>
             ))}
+          </View>
+        </View>
+
+        {/* Number Plate Compatibility CTA */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle} minPresenceAhead={140}>Number Plate Strategy</Text>
+          <View style={styles.ctaBox} wrap={false}>
+            <View style={styles.ctaHeaderRow}>
+              <View style={styles.ctaIconBadge}>
+                <PinIcon />
+              </View>
+              <Text style={styles.ctaTitle}>Check Your Number Plate Compatibility</Text>
+            </View>
+            <Text style={styles.ctaBody}>
+              Your registration number carries its own numerology, and it can either
+              amplify or clash with your Birth and Destiny numbers. Use the free
+              Number Plate Compatibility Checker in your NUMO AI report to test any
+              plate before you finalize your purchase.
+            </Text>
+            <View style={styles.ctaFeatureRow}>
+              <CheckIcon />
+              <Text style={styles.ctaFeatureText}>Instant compatibility score for any number</Text>
+            </View>
+            <View style={styles.ctaFeatureRow}>
+              <CheckIcon />
+              <Text style={styles.ctaFeatureText}>Personalized to your Birth &amp; Destiny numbers</Text>
+            </View>
+            <View style={styles.ctaFeatureRow}>
+              <CheckIcon />
+              <Text style={styles.ctaFeatureText}>Free, unlimited checks on your NUMO AI account</Text>
+            </View>
+            <Link src={reportUrl} style={styles.ctaButton}>
+              <Text style={styles.ctaButtonText}>Check Number Plate Compatibility &gt;</Text>
+            </Link>
           </View>
         </View>
 

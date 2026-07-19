@@ -58,7 +58,7 @@ export default function ReportsPage() {
   }, [debouncedSearch]);
 
   return (
-    <div className="relative min-h-screen bg-background text-on-surface antialiased pb-28">
+    <div className="relative min-h-screen bg-[#0A0A0A] text-on-surface antialiased pb-28">
       {/* Ambient glows */}
       <div className="fixed top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="fixed bottom-20 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />

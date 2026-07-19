@@ -5,7 +5,7 @@ type MobileNavActive = 'home' | 'divine' | 'reports' | 'profile'
 
 const MobileNav = ({ active }: { active: MobileNavActive }) => {
     return (
-        <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-white/10 bg-[#1a1a1a66] px-4 py-3 shadow-[0_-8px_30px_rgb(0,0,0,0.12)] backdrop-blur-xl">
+        <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around bg-[#1a1a1a00] px-4 py-3 backdrop-blur-xl">
             <div className='max-w-min mx-auto flex gap-6 items-center justify-between'>
                 <Link href="/" className={`flex flex-col items-center justify-center transition-all px-3 py-1 rounded-xl ${active === 'home' ? 'bg-[#f2ca50]/10  text-[#f2ca50]' : 'text-[#d0c5af] hover:bg-white/5'}`}>
                     <span className={`material-symbols-outlined ${active === 'home' ? "[font-variation-settings:'FILL'_1]" : ''}`}>home</span>
