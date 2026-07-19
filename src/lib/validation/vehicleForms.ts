@@ -9,7 +9,7 @@ const dateField = (label: string) =>
       message: `Enter a valid ${label.toLowerCase()}`,
     });
 
-const dobField = dateField("Date of birth").refine(
+export const dobField = dateField("Date of birth").refine(
   (value) => new Date(value).getTime() <= Date.now(),
   { message: "Date of birth cannot be in the future" },
 );

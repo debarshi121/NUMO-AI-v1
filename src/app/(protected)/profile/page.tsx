@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button";
 import { motion, type Variants } from "framer-motion";
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  profileSetupSchema,
+  type ProfileSetupFormValues,
+} from "@/lib/validation/profileForm";
 
 type Profile = {
   name: string | null;
@@ -33,12 +39,18 @@ export default function ProfilePage() {
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState<Profile["gender"]>(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
-  const [draftFullName, setDraftFullName] = useState(fullName);
-  const [draftDob, setDraftDob] = useState(dob);
-  const [draftGender, setDraftGender] =
-    useState<NonNullable<Profile["gender"]>>("other");
   const [saveError, setSaveError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ProfileSetupFormValues>({
+    resolver: zodResolver(profileSetupSchema),
+    defaultValues: { name: "", dob: "", gender: "male" },
+  });
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -66,14 +78,12 @@ export default function ProfilePage() {
   }, []);
 
   const openEditProfile = () => {
-    setDraftFullName(fullName);
-    setDraftDob(dob);
-    setDraftGender(gender ?? "other");
+    reset({ name: fullName, dob, gender: gender ?? "male" });
     setSaveError("");
     setShowEditProfile(true);
   };
 
-  const saveProfileChanges = async () => {
+  const saveProfileChanges = async (values: ProfileSetupFormValues) => {
     setSaveError("");
     setIsSaving(true);
 
@@ -81,11 +91,7 @@ export default function ProfilePage() {
       const response = await fetch("/api/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: draftFullName,
-          dob: draftDob,
-          gender: draftGender,
-        }),
+        body: JSON.stringify(values),
       });
       const data = (await response.json()) as {
         success: boolean;
@@ -215,17 +221,22 @@ export default function ProfilePage() {
             <h3 className="font-headline text-headline-sm font-semibold text-on-surface-variant px-1">
               Edit Profile
             </h3>
-            <div className="glass-card rounded-xl p-6 space-y-stack-gap-md">
+            <form
+              onSubmit={handleSubmit(saveProfileChanges)}
+              className="glass-card rounded-xl p-6 space-y-stack-gap-md"
+            >
               <div className="space-y-1">
                 <label className="font-body text-[12px] font-bold leading-4 tracking-[0.05em] uppercase text-on-surface-variant block">
                   Full Name
                 </label>
                 <input
                   type="text"
-                  value={draftFullName}
-                  onChange={(e) => setDraftFullName(e.target.value)}
+                  {...register("name")}
                   className="w-full bg-surface-container-lowest border border-white/10 rounded-lg px-4 py-3 font-body text-body-lg text-on-surface focus:outline-none focus:border-primary transition-colors"
                 />
+                {errors.name && (
+                  <p className="text-sm text-error">{errors.name.message}</p>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
@@ -234,28 +245,28 @@ export default function ProfilePage() {
                   </label>
                   <input
                     type="date"
-                    value={draftDob}
-                    onChange={(e) => setDraftDob(e.target.value)}
+                    {...register("dob")}
                     className="w-full bg-surface-container-lowest border border-white/10 rounded-lg px-4 py-3 font-body text-body-lg text-on-surface focus:outline-none focus:border-primary transition-colors"
                   />
+                  {errors.dob && (
+                    <p className="text-sm text-error">{errors.dob.message}</p>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <label className="font-body text-[12px] font-bold leading-4 tracking-[0.05em] uppercase text-on-surface-variant block">
                     Gender
                   </label>
                   <select
-                    value={draftGender}
-                    onChange={(e) =>
-                      setDraftGender(
-                        e.target.value as NonNullable<Profile["gender"]>,
-                      )
-                    }
+                    {...register("gender")}
                     className="w-full bg-surface-container-lowest border border-white/10 rounded-lg px-4 py-3 font-body text-body-lg text-on-surface focus:outline-none focus:border-primary transition-colors appearance-none"
                   >
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </select>
+                  {errors.gender && (
+                    <p className="text-sm text-error">{errors.gender.message}</p>
+                  )}
                 </div>
               </div>
               {saveError && <p className="text-sm text-error">{saveError}</p>}
@@ -275,8 +286,7 @@ export default function ProfilePage() {
                   Cancel
                 </MotionButton>
                 <MotionButton
-                  type="button"
-                  onClick={saveProfileChanges}
+                  type="submit"
                   className="h-12 cursor-pointer"
                   variant={"default"}
                   disabled={isSaving}
@@ -287,7 +297,7 @@ export default function ProfilePage() {
                   {isSaving ? "Saving..." : "Save"}
                 </MotionButton>
               </div>
-            </div>
+            </form>
           </motion.section>
         )}
 

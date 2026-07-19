@@ -4,9 +4,15 @@ import { StarsIcon } from "@/components/Icons";
 import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion, type Variants } from "framer-motion";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    profileSetupSchema,
+    type ProfileSetupFormValues,
+} from "@/lib/validation/profileForm";
 
 const stagger: Variants = {
     hidden: {},
@@ -18,31 +24,40 @@ const fadeUp: Variants = {
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 };
 
+const GENDER_OPTIONS = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "other", label: "Other" },
+] as const;
+
 const ProfileSetup = () => {
     const router = useRouter();
     const { data: session, update } = useSession();
-    const [gender, setGender] = useState("male");
-    const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const {
+        register,
+        handleSubmit,
+        control,
+        setValue,
+        formState: { errors },
+    } = useForm<ProfileSetupFormValues>({
+        resolver: zodResolver(profileSetupSchema),
+        defaultValues: { name: "", dob: "", gender: "male" },
+    });
+
     useEffect(() => {
         if (session?.user?.name) {
-            setName(session.user.name);
+            setValue("name", session.user.name);
         }
-    }, [session?.user?.name]);
+    }, [session?.user?.name, setValue]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (values: ProfileSetupFormValues) => {
         setError("");
         setLoading(true);
-
-        const trimmedName = name.trim();
-        const form = e.currentTarget;
-        const dob = (form.elements.namedItem("dob") as HTMLInputElement).value;
-
         try {
-            const { data } = await axios.post("/api/profile/setup", { name: trimmedName, dob, gender });
+            const { data } = await axios.post("/api/profile/setup", values);
             if (!data.success) {
                 setError(data.error ?? "Failed to save profile");
                 return;
@@ -97,7 +112,7 @@ const ProfileSetup = () => {
                     variants={stagger}
                     className="w-full max-w-sm mx-auto glass-card rounded-xl p-element-padding flex flex-col gap-stack-gap-md mb-24"
                 >
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-stack-gap-md">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-stack-gap-md">
                         {/* Name Input */}
                         <motion.div variants={fadeUp} className="flex flex-col gap-2">
                             <label className="font-label-caps text-label-caps text-on-surface-variant uppercase ml-1">
@@ -105,15 +120,15 @@ const ProfileSetup = () => {
                             </label>
                             <div className="flex items-center gap-2 bg-surface-container-lowest rounded-xl border border-white/10 px-4 py-3 focus-within:border-primary transition-colors">
                                 <input
-                                    name="name"
                                     className="bg-transparent border-none outline-none w-full text-on-surface placeholder:text-outline/40 p-0 text-base"
                                     placeholder="Enter Full Name"
                                     type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
+                                    {...register("name")}
                                 />
                             </div>
+                            {errors.name && (
+                                <p className="text-xs text-red-400 ml-1">{errors.name.message}</p>
+                            )}
                         </motion.div>
 
                         {/* DOB Picker */}
@@ -123,15 +138,17 @@ const ProfileSetup = () => {
                             </label>
                             <div className="relative flex items-center gap-2 bg-surface-container-lowest rounded-xl border border-white/10 px-4 py-3 focus-within:border-primary transition-colors">
                                 <input
-                                    name="dob"
                                     className="bg-transparent border-none outline-none w-full text-on-surface p-0 pr-8 text-base appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden"
                                     type="date"
-                                    required
+                                    {...register("dob")}
                                 />
                                 <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none">
                                     calendar_today
                                 </span>
                             </div>
+                            {errors.dob && (
+                                <p className="text-xs text-red-400 ml-1">{errors.dob.message}</p>
+                            )}
                         </motion.div>
 
                         {/* Gender Selection */}
@@ -139,29 +156,27 @@ const ProfileSetup = () => {
                             <label className="font-label-caps text-label-caps text-on-surface-variant uppercase ml-1">
                                 Gender
                             </label>
-                            <div className="grid grid-cols-3 gap-2 p-1 bg-surface-container-lowest rounded-xl border border-outline-variant/70 shadow-[inset_0_1px_0_rgba(242,202,80,0.08)]">
-                                <button
-                                    type="button"
-                                    onClick={() => setGender("male")}
-                                    className={`cursor-pointer py-2.5 rounded-lg font-label-caps text-label-caps uppercase transition-colors ${gender === "male" ? "bg-primary-container text-on-primary-container shadow-[0_0_0_1px_rgba(242,202,80,0.15)]" : "text-on-surface-variant hover:bg-surface-container"}`}
-                                >
-                                    Male
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setGender("female")}
-                                    className={`cursor-pointer py-2.5 rounded-lg font-label-caps text-label-caps uppercase transition-colors ${gender === "female" ? "bg-primary-container text-on-primary-container shadow-[0_0_0_1px_rgba(242,202,80,0.15)]" : "text-on-surface-variant hover:bg-surface-container"}`}
-                                >
-                                    Female
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setGender("other")}
-                                    className={`cursor-pointer py-2.5 rounded-lg font-label-caps text-label-caps uppercase transition-colors ${gender === "other" ? "bg-primary-container text-on-primary-container shadow-[0_0_0_1px_rgba(242,202,80,0.15)]" : "text-on-surface-variant hover:bg-surface-container"}`}
-                                >
-                                    Other
-                                </button>
-                            </div>
+                            <Controller
+                                control={control}
+                                name="gender"
+                                render={({ field }) => (
+                                    <div className="grid grid-cols-3 gap-2 p-1 bg-surface-container-lowest rounded-xl border border-outline-variant/70 shadow-[inset_0_1px_0_rgba(242,202,80,0.08)]">
+                                        {GENDER_OPTIONS.map((option) => (
+                                            <button
+                                                key={option.value}
+                                                type="button"
+                                                onClick={() => field.onChange(option.value)}
+                                                className={`cursor-pointer py-2.5 rounded-lg font-label-caps text-label-caps uppercase transition-colors ${field.value === option.value ? "bg-primary-container text-on-primary-container shadow-[0_0_0_1px_rgba(242,202,80,0.15)]" : "text-on-surface-variant hover:bg-surface-container"}`}
+                                            >
+                                                {option.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            />
+                            {errors.gender && (
+                                <p className="text-xs text-red-400 ml-1">{errors.gender.message}</p>
+                            )}
                         </motion.div>
 
                         {/* Privacy Note */}
